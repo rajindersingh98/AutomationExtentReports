@@ -18,7 +18,6 @@ public class RunFromJenkins {
         softAssert.assertEquals(1,3 , "Test 1 Passed");
         softAssert.assertEquals(1,1, "Test 1 Failed");
         softAssert.assertAll();
-
    }
 
    @Test

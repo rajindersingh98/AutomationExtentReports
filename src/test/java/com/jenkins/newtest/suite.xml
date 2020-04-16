@@ -2,9 +2,9 @@
 
 <suite name="All Testsd" thread-count="4" parallel="tests">
 
-    <listeners>
+   <!-- <listeners>
         <listener class-name="com.jenkins.newtest.TestListener"/>
-    </listeners>
+    </listeners>-->
 
     <suite-files>
         <suite-file path="suitejenkins.xml" />
