@@ -9,10 +9,7 @@ public class RunFromJenkinsSecond {
     @Test
     public void testthree(){
         Selenide.open("https://www.mailinator.com");
-       // System.out.println("checking logger two");
-     //   Selenide.$(".abc").click();
-   //     Assert.assertEquals(1,2, "failing test");
-       // ExtentTestManager.getTest().log(LogStatus.FAIL, "Hellooo started base test1");
+        Selenide.$(".abc").click();
    }
 
 }
