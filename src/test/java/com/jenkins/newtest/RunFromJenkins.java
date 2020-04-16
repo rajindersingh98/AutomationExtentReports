@@ -24,9 +24,7 @@ public class RunFromJenkins {
    @Test
     public void testNew(){
        softAssert = new SoftAssert();
-      /*  Selenide.open("https://www.google.com");
-        System.out.println("NAME TEST"+ExtentTestManager.getTest().getTest().getName());*/
-        softAssert.assertEquals(1,3 ,"Test 2 Failed one");
+       softAssert.assertEquals(1,3 ,"Test 2 Failed one");
        softAssert.assertEquals(2,3 , "test 2 Failed 2");
        softAssert.assertAll();
     }
