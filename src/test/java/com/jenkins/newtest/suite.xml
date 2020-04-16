@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="All Tests" thread-count="4" parallel="tests">
+
+    <listeners>
+        <listener class-name="com.jenkins.newtest.TestListener"/>
+    </listeners>
+
+    <suite-files>
+        <suite-file path="suitejenkins.xml" />
+        <suite-file path="suitejenkinssecond.xml" />
+    </suite-files>
+</suite>

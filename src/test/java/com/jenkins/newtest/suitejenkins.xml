@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Jenkins one" thread-count="2" parallel="tests">
+
+
+
+    <test name="My Tests 2" >
+        <classes>
+
+            <class name="com.jenkins.newtest.RunFromJenkinsSecond" />
+        </classes>
+
+    </test>
+</suite>
