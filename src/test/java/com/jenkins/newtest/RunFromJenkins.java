@@ -9,7 +9,7 @@ import org.testng.annotations.*;
 import org.testng.asserts.SoftAssert;
 
 @Listeners(TestListener.class)
-public class RunFromJenkins {
+public class RunFromJenkins extends BaseTest{
     private SoftAssert softAssert =null;
 
     @Test

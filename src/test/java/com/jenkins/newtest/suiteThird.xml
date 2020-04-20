@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Jenkins second" thread-count="2" parallel="tests">
+
+    <test name="Selenium Grid">
+        <classes>
+            <class name="com.jenkins.newtest.RunOnSeleniumGrid" />
+
+        </classes>
+
+    </test>
+
+</suite>

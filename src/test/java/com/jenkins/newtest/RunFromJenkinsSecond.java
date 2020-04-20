@@ -6,7 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 @Listeners(TestListener.class)
-public class RunFromJenkinsSecond {
+public class RunFromJenkinsSecond extends BaseTest{
     @Test
     public void testthree(){
         Selenide.open("https://www.mailinator.com");

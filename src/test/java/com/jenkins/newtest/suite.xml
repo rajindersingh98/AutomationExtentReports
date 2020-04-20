@@ -9,5 +9,6 @@
     <suite-files>
         <suite-file path="suitejenkins.xml" />
         <suite-file path="suitejenkinssecond.xml" />
+        <suite-file path="suiteThird.xml" />
     </suite-files>
 </suite>
