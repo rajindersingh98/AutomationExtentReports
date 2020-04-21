@@ -35,6 +35,8 @@ public class CreateRequestFromExcelData {
 	
 	public CreateRequestFromExcelData(String api) {
 		setXMLXLSNamePath(api);
+		Request r = createRequest("Email_1","SRP");
+		System.out.println(r.getRequest());
 		
 	}
 	
@@ -136,7 +138,8 @@ public class CreateRequestFromExcelData {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String runautomationOnRegion =  getProperty("runautomationOnRegion", "properties/instance.properties");
+		String runautomationOnRegion =  getProperty("runautomationOnRegion", System.getProperty("user.dir")+"\\properties\\instance.properties");
+		System.out.println("runautomationOnRegion+++++++"+runautomationOnRegion);
 		
 		Iterator entries = h.entrySet().iterator();
 		while (entries.hasNext()) {
@@ -148,7 +151,7 @@ public class CreateRequestFromExcelData {
 			
 			if("pickfromproperty".equals(value.trim())){
 			    System.out.println("With:::::" + key); 
-				value = getProperty(key.trim(), "properties"+"//"+applicatioName+"//"+runautomationOnRegion+".properties");
+				value = getProperty(key.trim(), System.getProperty("user.dir")+"\\"+"properties"+"\\"+applicatioName+"\\"+runautomationOnRegion+".properties");
 				System.out.println("With:::::" + value);  
 			}
 			System.out.println("going to replace::::::" + toreplace+ "With:::::" + value);
