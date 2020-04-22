@@ -21,6 +21,8 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 
 
+
+
 public class CreateRequestFromExcelData {
 	public static final String XLS_NAME = "_xls_name.xls";
 	public static final String XML_NAME = "_xml_name.xml";
@@ -32,19 +34,23 @@ public class CreateRequestFromExcelData {
 	String xmlName = null;
 	HSSFWorkbook workbook = null;
 	HSSFSheet sheet = null;
-	
-	public CreateRequestFromExcelData(String api) {
-		setXMLXLSNamePath(api);
-		Request r = createRequest("Email_1","SRP");
-		System.out.println(r.getRequest());
-		
+	private static CreateRequestFromExcelData createXMLRequest = new CreateRequestFromExcelData();
+	/*public String prescribe(String drugName){
+		String requestXML = createRequest(drugName);
+		return requestXML;
+		//System.out.println(request);
+	}*/
+	public static CreateRequestFromExcelData getInstance() {
+		return createXMLRequest;
 	}
+
+	
 	
 	public void setXMLXLSNamePath(String api){
 		xmlName = System.getProperty("user.dir")+XML_PATH+api+XML_NAME;
 		excelName = System.getProperty("user.dir")+XLS_PATH+api+XLS_NAME;
 		System.out.println(xmlName);
-		System.out.println(getAllTestcases().get(2));
+	//	System.out.println(getAllTestcases().get(2));
 		
 	}
 	
@@ -140,6 +146,7 @@ public class CreateRequestFromExcelData {
 		}
 		String runautomationOnRegion =  getProperty("runautomationOnRegion", System.getProperty("user.dir")+"\\properties\\instance.properties");
 		System.out.println("runautomationOnRegion+++++++"+runautomationOnRegion);
+		System.out.println("runautomationOnRegion+++++++"+h.get("DBTOCONNECT"));
 		
 		Iterator entries = h.entrySet().iterator();
 		while (entries.hasNext()) {
@@ -265,7 +272,11 @@ public class CreateRequestFromExcelData {
         catch(Exception ae){
         	System.out.println(ae);
         }
-        return replaceTags(h ,applicationName);
+		
+		Request r = replaceTags(h ,applicationName);
+		h.get("DBTOCONNECT");
+		r.setH(h);
+        return r;
 	}
 
 }

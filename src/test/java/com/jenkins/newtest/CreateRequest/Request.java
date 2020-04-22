@@ -1,5 +1,7 @@
 package com.jenkins.newtest.CreateRequest;
 
+import java.util.Map;
+
 public class Request {
 	private String request;
 	public String getRequest() {
@@ -22,6 +24,14 @@ public class Request {
 	}
 	public void setResponsenotpresent(String responsenotpresent) {
 		this.responsenotpresent = responsenotpresent;
+	}
+	
+	private Map h;
+	public Map getH() {
+		return h;
+	}
+	public void setH(Map h) {
+		this.h = h;
 	}
 
 }
