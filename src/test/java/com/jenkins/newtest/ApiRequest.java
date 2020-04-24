@@ -94,7 +94,13 @@ public class ApiRequest{
 						 if("RandomName".equals(valuetoAssert)) {
 							 valuetoAssert = randomName;
 						 }
-						 softAssert.assertEquals(rs.getString(resultsetColumn), valuetoAssert , "values not equal +"+rs.getString(resultsetColumn)+"   "+valuetoAssert + "\n");
+						 String resultSetColumnAndType[] = resultsetColumn.split(" TYPE ");
+						 if("STRING".equals(resultSetColumnAndType[1])) {
+						 softAssert.assertEquals(rs.getString(resultSetColumnAndType[0]), valuetoAssert , "values not equal +"+rs.getString(resultSetColumnAndType[0])+"   "+valuetoAssert + "\n");
+						 }
+						 else if("INT".equals(resultSetColumnAndType[1])) {
+							 softAssert.assertEquals(String.valueOf(rs.getInt(resultSetColumnAndType[0])), valuetoAssert , "values not equal +"+rs.getString(resultSetColumnAndType[0])+"   "+valuetoAssert + "\n");
+							 }
 					  }
 					  softAssert.assertAll();
 					  }  
