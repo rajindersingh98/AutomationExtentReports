@@ -91,6 +91,9 @@ public class ApiRequest{
 						 String resulsetVerificationArray [] = verificationArray[verificationArrayIndex].split("=");
 						 String resultsetColumn = resulsetVerificationArray[0];
 						 String valuetoAssert = h.get(resulsetVerificationArray[1]).toString();
+						/* if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
+							 valuetoAssert= "hdhdh@jjdjd.com";
+						 }*/
 						 if("RandomName".equals(valuetoAssert)) {
 							 valuetoAssert = randomName;
 						 }
