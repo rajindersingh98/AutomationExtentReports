@@ -3,6 +3,7 @@ package com.jenkins.newtest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,6 +17,7 @@ import org.testng.asserts.SoftAssert;
 import com.jenkins.newtest.CreateRequest.CreateRequestFromExcelData;
 import com.jenkins.newtest.CreateRequest.Request;
 
+import db.DBVerification;
 import db.DFDBConnection;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -43,10 +45,6 @@ public class ApiRequest{
 		request = request.replace("<LicenseCapCount>deleted</LicenseCapCount>","");
 		request = request.replace("<PhoneExt>deleted</PhoneExt>","");
 		request = request.replace("<BackPhoneExt>deleted</BackPhoneExt>","");
-	
-		
-		
-		
 				    
 		System.out.println(request);
 		Response res = given().contentType(ContentType.XML).accept(ContentType.XML).body(request).when().post("https://register.qa.drfirst.com/ws/wsAddPractice");
@@ -56,42 +54,23 @@ public class ApiRequest{
 		//res.then().body("RegistrationApiResponse.RegistrationApiResponseBody.ErrorResponse.ErrorResponseList.Error.ErrorText", Matchers.is("ContactEmail Validation Failed"));
 		HashMap h = (HashMap)req.getH();
 		String finalQuery = null;
-		String dbVerification[] = h.get("DBVERIFICATION").toString().split(":VERIFICATIONSSEPERATOR:");
-		for(int dbVerificationIndex = 0 ;dbVerificationIndex < dbVerification.length ; dbVerificationIndex++) {
-			String verificationDetails[] = dbVerification[dbVerificationIndex].split(":");
-				String dbName = verificationDetails[0].toString();
-				String queryColumnValue = h.get(verificationDetails[1]).toString();
-				String verificationColumnValue = h.get(verificationDetails[2]).toString();
-				String queryParameterExists = h.get(verificationDetails[1]+"PARAMETERSEXIST").toString();
-				String [] parametersAndValueToReplace = null;
-				if("y".equalsIgnoreCase(queryParameterExists)){
-					parametersAndValueToReplace =  h.get(verificationDetails[1]+"PARAMETERS").toString().split(":PARAMETER:");
-				
-				for(int parametersAndValueToReplaceIndex = 0 ;parametersAndValueToReplaceIndex < parametersAndValueToReplace.length ; parametersAndValueToReplaceIndex++) {
-					String parametersAndValueToReplaceArray [] = parametersAndValueToReplace[parametersAndValueToReplaceIndex].split("=");
-					String parameter = parametersAndValueToReplaceArray[0];
-					String xmlPath = parametersAndValueToReplaceArray[1];
-					String value = XmlPath.from(res.asString()).get(xmlPath);
-					queryColumnValue = queryColumnValue.replace(parameter, value)	;
-					
-				}
-				}
-				//jjjjj
-			//	System.out.println("dbName::::"+dbName);
-				System.out.println("QueryColumn::::"+dbVerificationIndex+"   "+queryColumnValue);
-				System.out.println("verificationColumn::::"+verificationColumnValue);
-				System.out.println(finalQuery);
-				Statement st = DFDBConnection.getStatement(dbName);
+		DBVerification d = new DBVerification();
+		Map p = d.getDBAndQueryDetails(h, res);
+		Iterator entries = p.entrySet().iterator();
+		while (entries.hasNext()) {
+			Map.Entry thisEntry = (Map.Entry) entries.next();
+			String key = thisEntry.getKey().toString();
+			ArrayList<String> value = (ArrayList)thisEntry.getValue();
+			try {
+				ResultSet r = d.getResultSet(value.get(0), value.get(1) ,value.get(2));
 				SoftAssert softAssert = new SoftAssert();
-				try {
-					  ResultSet rs = st.executeQuery(queryColumnValue);
-					  while (rs.next()) {
-					  String verificationArray []  = verificationColumnValue.split(":");
+				 while (r.next()) {
+					  String verificationArray []  = value.get(2).split(":");
 					  for(int verificationArrayIndex = 0 ;verificationArrayIndex <verificationArray.length ;verificationArrayIndex++) {
 						 String resulsetVerificationArray [] = verificationArray[verificationArrayIndex].split("=");
 						 String resultsetColumn = resulsetVerificationArray[0];
 						 String valuetoAssert = h.get(resulsetVerificationArray[1]).toString();
-						/* if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
+					/*	 if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
 							 valuetoAssert= "hdhdh@jjdjd.com";
 						 }*/
 						 if("RandomName".equals(valuetoAssert)) {
@@ -99,26 +78,25 @@ public class ApiRequest{
 						 }
 						 String resultSetColumnAndType[] = resultsetColumn.split(" TYPE ");
 						 if("STRING".equals(resultSetColumnAndType[1])) {
-						 softAssert.assertEquals(rs.getString(resultSetColumnAndType[0]), valuetoAssert , "values not equal +"+rs.getString(resultSetColumnAndType[0])+"   "+valuetoAssert + "\n");
+						 softAssert.assertEquals(r.getString(resultSetColumnAndType[0]), valuetoAssert , "values not equal +"+r.getString(resultSetColumnAndType[0])+"   "+valuetoAssert + "\n");
 						 }
 						 else if("INT".equals(resultSetColumnAndType[1])) {
-							 softAssert.assertEquals(String.valueOf(rs.getInt(resultSetColumnAndType[0])), valuetoAssert , "values not equal +"+rs.getString(resultSetColumnAndType[0])+"   "+valuetoAssert + "\n");
+							 softAssert.assertEquals(String.valueOf(r.getInt(resultSetColumnAndType[0])), valuetoAssert , "values not equal +"+r.getString(resultSetColumnAndType[0])+"   "+valuetoAssert + "\n");
 							 }
 					  }
-					  softAssert.assertAll();
-					  }  
-					  
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 finally {
-
-		              DFDBConnection.closeConnection();
-		        }
+					
+					  } 
+				  softAssert.assertAll();
+			}
+			catch(Exception e) {
 				
+			}
+			 finally {
+
+	             DFDBConnection.closeConnection();
+	       }
+			
 		}
-		
 	}
 	
 	public String getRandomName(){
@@ -133,7 +111,7 @@ public class ApiRequest{
 					+ letter[Integer.parseInt(timeString.substring(index,
 							index + 1))];
 		}
-		String lastName = "Last" + randomString;
+		String lastName =  randomString;
 		return lastName;
 	}
 	
