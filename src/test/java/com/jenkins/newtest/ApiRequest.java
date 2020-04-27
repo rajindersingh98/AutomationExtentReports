@@ -37,9 +37,9 @@ public class ApiRequest{
 	public ApiRequest() {
 		CreateRequestFromExcelData.getInstance().setXMLXLSNamePath("add_practice");
 		req = CreateRequestFromExcelData.getInstance().createRequest("Email_1","SRP");
-		
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	@Test
 	public void checkAPI() {
 		String request = req.getRequest();
@@ -57,11 +57,12 @@ public class ApiRequest{
 	   
 		//res.then().body("RegistrationApiResponse.RegistrationApiResponseBody.ErrorResponse.ErrorResponseList.Error.ErrorText", Matchers.is("ContactEmail Validation Failed"));
 		HashMap h = (HashMap)req.getH();
-		String finalQuery = null;
+		SoftAssert softAssert = new SoftAssert();
+		if(!("blank".equals(h.get("DBVERIFICATION")))) {
 		DBVerification d = new DBVerification();
 		Map p = d.getDBAndQueryDetails(h, res);
 		Iterator entries = p.entrySet().iterator();
-		SoftAssert softAssert = new SoftAssert();
+		
 		while (entries.hasNext()) {
 			Map.Entry thisEntry = (Map.Entry) entries.next();
 			String key = thisEntry.getKey().toString();
@@ -75,9 +76,9 @@ public class ApiRequest{
 						 String resulsetVerificationArray [] = verificationArray[verificationArrayIndex].split("=");
 						 String resultsetColumn = resulsetVerificationArray[0];
 						 String valuetoAssert = h.get(resulsetVerificationArray[1]).toString();
-						 if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
+						/* if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
 							 valuetoAssert= "hdhdh@jjdjd.com";
-						 }
+						 }*/
 						 if("RandomName".equals(valuetoAssert)) {
 							 valuetoAssert = randomName;
 						 }
@@ -102,6 +103,7 @@ public class ApiRequest{
 	             DFDBConnection.closeConnection();
 	       }
 			
+		}
 		}
 		 ExtentTestManager.getTest().log(LogStatus.INFO," REQUEST :: <textarea>" + request + "</textarea>","");
 		  ExtentTestManager.getTest().log(LogStatus.INFO,"RESPONSE ::: <textarea>" + res.prettyPrint() + "</textarea>","");
