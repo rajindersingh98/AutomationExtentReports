@@ -61,13 +61,14 @@ public class ApiRequest{
 		DBVerification d = new DBVerification();
 		Map p = d.getDBAndQueryDetails(h, res);
 		Iterator entries = p.entrySet().iterator();
+		SoftAssert softAssert = new SoftAssert();
 		while (entries.hasNext()) {
 			Map.Entry thisEntry = (Map.Entry) entries.next();
 			String key = thisEntry.getKey().toString();
 			ArrayList<String> value = (ArrayList)thisEntry.getValue();
 			try {
 				ResultSet r = d.getResultSet(value.get(0), value.get(1) ,value.get(2));
-				SoftAssert softAssert = new SoftAssert();
+				
 				 while (r.next()) {
 					  String verificationArray []  = value.get(2).split(":");
 					  for(int verificationArrayIndex = 0 ;verificationArrayIndex <verificationArray.length ;verificationArrayIndex++) {
@@ -91,9 +92,7 @@ public class ApiRequest{
 					
 					  }
 			//	 Markup m = MarkupHelper.createCodeBlock(code);
-				  ExtentTestManager.getTest().log(LogStatus.INFO," REQUEST :: <textarea>" + request + "</textarea>","");
-				  ExtentTestManager.getTest().log(LogStatus.INFO,"RESPONSE ::: <textarea>" + res.prettyPrint() + "</textarea>","");
-				  softAssert.assertAll();
+				 
 			}
 			catch(Exception e) {
 				
@@ -104,6 +103,9 @@ public class ApiRequest{
 	       }
 			
 		}
+		 ExtentTestManager.getTest().log(LogStatus.INFO," REQUEST :: <textarea>" + request + "</textarea>","");
+		  ExtentTestManager.getTest().log(LogStatus.INFO,"RESPONSE ::: <textarea>" + res.prettyPrint() + "</textarea>","");
+		  softAssert.assertAll();
 	}
 	
 	public String getRandomName(){
