@@ -11,11 +11,14 @@ import java.util.Map;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
 import com.jenkins.newtest.CreateRequest.CreateRequestFromExcelData;
 import com.jenkins.newtest.CreateRequest.Request;
+import com.relevantcodes.extentreports.LogStatus;
+
 
 import db.DBVerification;
 import db.DFDBConnection;
@@ -27,6 +30,7 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.*;
 
+@Listeners(TestListener.class)
 public class ApiRequest{
 	Request req;
 	String randomName = null;
@@ -70,9 +74,9 @@ public class ApiRequest{
 						 String resulsetVerificationArray [] = verificationArray[verificationArrayIndex].split("=");
 						 String resultsetColumn = resulsetVerificationArray[0];
 						 String valuetoAssert = h.get(resulsetVerificationArray[1]).toString();
-					/*	 if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
+						 if("ContactEmail7".equalsIgnoreCase(resulsetVerificationArray[1].toString())) {
 							 valuetoAssert= "hdhdh@jjdjd.com";
-						 }*/
+						 }
 						 if("RandomName".equals(valuetoAssert)) {
 							 valuetoAssert = randomName;
 						 }
@@ -85,7 +89,10 @@ public class ApiRequest{
 							 }
 					  }
 					
-					  } 
+					  }
+			//	 Markup m = MarkupHelper.createCodeBlock(code);
+				  ExtentTestManager.getTest().log(LogStatus.INFO," REQUEST :: <textarea>" + request + "</textarea>","");
+				  ExtentTestManager.getTest().log(LogStatus.INFO,"RESPONSE ::: <textarea>" + res.prettyPrint() + "</textarea>","");
 				  softAssert.assertAll();
 			}
 			catch(Exception e) {
