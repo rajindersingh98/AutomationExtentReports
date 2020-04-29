@@ -41,6 +41,11 @@
                         
                         <Fax>$Fax20</Fax>
                     </ContactDetails>
+					<PracticeSettings>
+ <EnableEPCS>y</EnableEPCS>
+ <EnableiPrescribe>y</EnableiPrescribe> 
+<EnableEnterpriseSupervisor>y</EnableEnterpriseSupervisor>
+ </PracticeSettings>
                 </PracticeDetails>
             </Practice>
         </WsAddPracticeRequest>
