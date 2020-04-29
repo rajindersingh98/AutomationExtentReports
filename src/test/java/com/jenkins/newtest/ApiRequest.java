@@ -7,10 +7,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -36,12 +38,26 @@ public class ApiRequest{
 	String randomName = null;
 	public ApiRequest() {
 		CreateRequestFromExcelData.getInstance().setXMLXLSNamePath("add_practice");
-		req = CreateRequestFromExcelData.getInstance().createRequest("Email_1","SRP");
+	
 	}
+	@DataProvider(name="Testcases")
+	public static Object[][] credentials() {
+		Object[][] testcasesObject = new Object[CreateRequestFromExcelData.getInstance().getAllTestcases().size()][1];
+		List<String[][]> results = new ArrayList<String[][]>();
+		ArrayList<String> testcases = CreateRequestFromExcelData.getInstance().getAllTestcases();
+		for (int i = 0; i < testcases.size(); i++) {
+			//String firstParameter = testcases.get(i).toString();
+			testcasesObject[i][0]= testcases.get(i).toString();
+		} 
+		return testcasesObject;
+ 
+}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
-	@Test
-	public void checkAPI() {
+	@Test(dataProvider = "Testcases")
+	public void checkAPI(String testcaseName) {
+		System.out.print("TNAME:::"+testcaseName);
+		req = CreateRequestFromExcelData.getInstance().createRequest(testcaseName,"SRP");
 		String request = req.getRequest();
 		request = request.replace("RandomExt", "Rohit_"+Math.random());
 		randomName = getRandomName();
@@ -55,10 +71,10 @@ public class ApiRequest{
 		System.out.println(res.prettyPrint().toString());
 		System.out.println("username:::::::::::::::"+XmlPath.from(res.asString()).get("RegistrationApiResponse.RegistrationApiResponseBody.WsAddPracticeResponse.Practice.PracticeIDSet.RcopiaUserName"));
 	   
-		//res.then().body("RegistrationApiResponse.RegistrationApiResponseBody.ErrorResponse.ErrorResponseList.Error.ErrorText", Matchers.is("ContactEmail Validation Failed"));
+		res.then().body("RegistrationApiResponse.RegistrationApiResponseBody.ErrorResponse.ErrorResponseList.Error.ErrorText", Matchers.is("ContactEmail Validation Failed"));
 		HashMap h = (HashMap)req.getH();
 		SoftAssert softAssert = new SoftAssert();
-		if(!("blank".equals(h.get("DBVERIFICATION")))) {
+		if(!("n".equals(h.get("DBVERIFICATION")))) {
 		DBVerification d = new DBVerification();
 		Map p = d.getDBAndQueryDetails(h, res);
 		Iterator entries = p.entrySet().iterator();
