@@ -28,7 +28,7 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestStart(ITestResult iTestResult) {
         System.out.println(("*** Running test method " + iTestResult.getMethod().getMethodName() + "..."));
-        ExtentTestManager.startTest(iTestResult.getMethod().getMethodName());
+       // ExtentTestManager.startTest(iTestResult.getMethod().getMethodName());
     }
 
     @Override

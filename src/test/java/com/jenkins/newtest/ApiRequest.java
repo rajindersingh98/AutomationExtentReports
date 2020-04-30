@@ -12,6 +12,8 @@ import java.util.Map;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.testng.ITestContext;
+import org.testng.ITestResult;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -56,6 +58,7 @@ public class ApiRequest{
 	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
 	@Test(dataProvider = "Testcases")
 	public void checkAPI(String testcaseName) {
+		 ExtentTestManager.startTest(testcaseName);
 		System.out.print("TNAME:::"+testcaseName);
 		req = CreateRequestFromExcelData.getInstance().createRequest(testcaseName,"SRP");
 		String request = req.getRequest();
@@ -69,10 +72,22 @@ public class ApiRequest{
 		System.out.println(request);
 		Response res = given().contentType(ContentType.XML).accept(ContentType.XML).body(request).when().post("https://register.qa.drfirst.com/ws/wsAddPractice");
 		System.out.println(res.prettyPrint().toString());
-		System.out.println("username:::::::::::::::"+XmlPath.from(res.asString()).get("RegistrationApiResponse.RegistrationApiResponseBody.WsAddPracticeResponse.Practice.PracticeIDSet.RcopiaUserName"));
-	   
-		res.then().body("RegistrationApiResponse.RegistrationApiResponseBody.ErrorResponse.ErrorResponseList.Error.ErrorText", Matchers.is("ContactEmail Validation Failed"));
+		 ExtentTestManager.getTest().log(LogStatus.INFO," REQUEST :: <textarea>" + request + "</textarea>","");
+		  ExtentTestManager.getTest().log(LogStatus.INFO,"RESPONSE ::: <textarea>" + res.prettyPrint() + "</textarea>","");
+		Utils u = new Utils();
 		HashMap h = (HashMap)req.getH();
+		Map xmlVerificationMap = u.getXmlVerificationMap(h.get("Status").toString().split(":"));
+		Iterator xmlVerificationEntries = xmlVerificationMap.entrySet().iterator();
+		
+		while (xmlVerificationEntries.hasNext()) {
+			Map.Entry thisEntry = (Map.Entry) xmlVerificationEntries.next();
+			String key = thisEntry.getKey().toString();
+			String value = thisEntry.getValue().toString();
+		   System.out.println("username:::::::::::::::"+XmlPath.from(res.asString()).get("RegistrationApiResponse.RegistrationApiResponseBody.WsAddPracticeResponse.Practice.PracticeIDSet.RcopiaUserName"));
+	   
+		res.then().body(key, Matchers.is(value));
+		}
+		
 		SoftAssert softAssert = new SoftAssert();
 		if(!("n".equals(h.get("DBVERIFICATION")))) {
 		DBVerification d = new DBVerification();
@@ -121,8 +136,7 @@ public class ApiRequest{
 			
 		}
 		}
-		 ExtentTestManager.getTest().log(LogStatus.INFO," REQUEST :: <textarea>" + request + "</textarea>","");
-		  ExtentTestManager.getTest().log(LogStatus.INFO,"RESPONSE ::: <textarea>" + res.prettyPrint() + "</textarea>","");
+		
 		  softAssert.assertAll();
 	}
 	
