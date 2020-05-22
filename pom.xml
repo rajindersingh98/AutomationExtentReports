@@ -133,11 +133,5 @@
             <artifactId>serenity-reports</artifactId>
             <version>2.2.8</version>
         </dependency>
-
-
-
     </dependencies>
-
-
-
 </project>
