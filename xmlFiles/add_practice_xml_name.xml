@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RegistrationApiRequest xmlns="urn:drfirst.com:registrationapi:v1_0">
+<RegistrationApiRequestHeader>
+		<ApiVersion>1.0</ApiVersion>
+        <RegistrationVendorUserName>$RegistrationVendorUserName1</RegistrationVendorUserName>
+        <RegistrationVendorPassword>$RegistrationVendorPassword2</RegistrationVendorPassword>
+    </RegistrationApiRequestHeader>
+    <RegistrationApiRequestBody>
+        <WsAddPracticeRequest>
+            <Practice>
+               
+		    <ExternalID>$ExternalID3</ExternalID>
+
+                <PracticeDetails>
+                    <PracticeName>$PracticeName4</PracticeName>
+		  <OfficeName>$OfficeName8</OfficeName>
+		    <ContactLastName>$ContactLastName6</ContactLastName>
+		    <ContactEmail>$ContactEmail7</ContactEmail>
+			   <ContactFirstName>$ContactFirstName5</ContactFirstName>
+                 <LicenseCapCount>$LicenseCapCount10</LicenseCapCount>   
+		    <ApplicationName>$ApplicationName9</ApplicationName>
+		   
+			<LicenseWarningLimit>$LicenseWarningLimit21</LicenseWarningLimit>
+
+                    <ContactDetails>
+                        <AddressDetails>
+                            <Address1>$Address111</Address1>
+			    <Address2>$Address212</Address2>
+			    <City>$City13</City>
+			    <State>$State14</State>
+			    <ZipCode>$ZipCode15</ZipCode>        
+                        </AddressDetails>
+						<BackPhoneDetails>
+                            <BackPhone>$BackPhone18</BackPhone>
+			    <BackPhoneExt>$BackPhoneExt19</BackPhoneExt>   
+                        </BackPhoneDetails>
+                        <PhoneDetails>
+                            <Phone>$Phone16</Phone>
+			    <PhoneExt>$PhoneExt17</PhoneExt>    
+                        </PhoneDetails>
+                        
+                        <Fax>$Fax20</Fax>
+                    </ContactDetails>
+					<PracticeSettings>
+ <EnableEPCS>y</EnableEPCS>
+ <EnableiPrescribe>y</EnableiPrescribe> 
+<EnableEnterpriseSupervisor>y</EnableEnterpriseSupervisor>
+ </PracticeSettings>
+                </PracticeDetails>
+            </Practice>
+        </WsAddPracticeRequest>
+    </RegistrationApiRequestBody>
+</RegistrationApiRequest>
